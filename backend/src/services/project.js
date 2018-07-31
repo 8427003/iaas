@@ -2,6 +2,7 @@ const db = require('../helper/dbconnect');
 const projectTemplateService = require('../services/projectTemplate');
 const projectService = require('../services/project');
 const dockerStack = require('../dockerAPI/dockerStack');
+const dockerService = require('../dockerAPI/dockerService');
 const uuidv1 = require('uuid/v1');
 const _get = require('lodash/get');
 const MODEL_NAME = 'project';
@@ -50,9 +51,8 @@ module.exports = {
         return projects.map(p => {
             return {
                 ...p,
-                dockerStack.services p.stackId
+                services: dockerService.getServicesBy({stackId: p.stackId})
             }
         })
     }
-
 }
