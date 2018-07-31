@@ -1,4 +1,4 @@
 const request = require('request');
-request.get('http://unix:/var/run/docker.sock:/services', function(res, err){
-    console.log(123123);
+request.get('http://unix:/var/run/docker.sock:/services', {headers: { host:'http' }}, function(err, response, body){
+    console.log(body);
 })
