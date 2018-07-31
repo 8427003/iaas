@@ -9,6 +9,7 @@ module.exports = {
     create: async ({id, dockerYAML, name, desc, author}) => {
         const connection = db.getConnection();
         const now = new Date().getTime();
+        const stackId = uuidv1();
         const modelData = {
             id,
             name,
@@ -25,12 +26,11 @@ module.exports = {
         } catch (err) {
             throw new Error(err)
         }
-
-        const stackId = uuidv1();
         try {
             await dockerStack.deployWrap(dockerYAML, stackId);
         }
         catch (err) {
+            connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);
             throw Error(err);
         }
     }

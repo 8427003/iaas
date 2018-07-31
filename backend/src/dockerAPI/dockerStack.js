@@ -8,12 +8,18 @@ const options2str = require('../utils/options2str');
 async function deploy(options, STACK) {
     const optionsStr = options2str(options);
     const command = `docker stack deploy ${optionsStr} ${STACK}`;
-    const { stdout, stderr } = await exec(command);
-    if(!stderr) {
-        return STACK;
+    try {
+        const { stdout, stderr } = await exec(command);
+        if(stderr) {
+            console.warn(stderr);
+        }
+        if(stdout) {
+            return STACK;
+        }
     }
-
-    throw new Error(`fail exec ${command} ${stderr}`)
+    catch(e) {
+        throw new Error(`fail exec ${command} ${e}`)
+    }
 }
 async function deployWrap(dockerYAML, STACK = uuidv1()) {
     const data = yaml.safeDump(dockerYAML);
