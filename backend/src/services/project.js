@@ -46,7 +46,13 @@ module.exports = {
     },
     list: async (pageNum, pageSize) => {
         const connection = db.getConnection();
-        const [results] = await connection.query(`SELECT * FROM ${MODEL_NAME}`);
-        return results;
+        const [ projects ] = await connection.query(`SELECT * FROM ${MODEL_NAME}`);
+        return projects.map(p => {
+            return {
+                ...p,
+                dockerStack.services p.stackId
+            }
+        })
     }
+
 }
