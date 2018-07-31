@@ -12,7 +12,7 @@ async function deploy(options, STACK) {
         return await exec(command);
     }
     catch(e) {
-        throw new Error(`fail exec ${command} ${e}`)
+        throw `fail exec ${command} ${e}`
     }
 }
 async function deployWrap(dockerYAML, STACK = uuidv1()) {

@@ -20,7 +20,6 @@ async function create (req, res, next) {
         }));
     }
     catch(err) {
-        console.log(err, 'laaaaaaaast')
-        return res.json(resultWrap({}, err));
+        return res.json(resultWrap({}, err.toString()));
     }
 }
