@@ -6,16 +6,15 @@ async function getServicesBy({ stackId }) {
         headers: {
             host:'http'
         },
-        query: {
+        qs: {
             filters: JSON.stringify({
                 name: [ stackId ]
             })
         },
     }
-    const [response, body] = await request.get(`${baseUrl}/services`, options)
-    return body;
+    return JSON.parse(await request.get(`${baseUrl}/services`, options));
 }
 
 module.exports = {
-    getServices,
+    getServicesBy,
 }

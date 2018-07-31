@@ -28,15 +28,9 @@ async function rm(STACK) {
     const command = `docker stack rm ${STACK}`;
     return await exec(command);
 }
-async function getServices(stackId) {
-    const command = `docker service ls | grep ${stackId}`;
-    const { stdout, stderr } await exec(command);
-    console.log(stdout);
-}
 
 module.exports = {
     deploy,
     deployWrap,
-    rm,
-    getServices,
+    rm
 }

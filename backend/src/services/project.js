@@ -48,11 +48,14 @@ module.exports = {
     list: async (pageNum, pageSize) => {
         const connection = db.getConnection();
         const [ projects ] = await connection.query(`SELECT * FROM ${MODEL_NAME}`);
-        return projects.map(p => {
-            return {
-                ...p,
-                services: dockerService.getServicesBy({stackId: p.stackId})
-            }
-        })
+	const allPromise = projects.map(p => dockerService.getServicesBy({stackId: p.stackId}));
+	const projectServices = await Promise.all(allPromise);
+	return projects.map((item, index) => {
+		return {
+			...item,
+			services: projectServices[index]
+		}
+ 
+	});
     }
 }
