@@ -7,13 +7,6 @@ const MODEL_NAME = 'project';
 
 module.exports = {
     create: async ({id, dockerYAML, name, desc, author}) => {
-        const stackId = uuidv1();
-        try {
-            await dockerStack.deployWrap(dockerYAML, stackId);
-        }
-        catch (err) {
-            throw Error(err);
-        }
         const connection = db.getConnection();
         const now = new Date().getTime();
         const modelData = {
@@ -23,16 +16,22 @@ module.exports = {
             createTime: now,
             updateTime: now,
             author,
-            dockerYAML,
+            dockerYAML: JSON.stringify(dockerYAML),
             stackId
         }
         try {
             const [ result ] =  await connection.query(`INSERT INTO ${MODEL_NAME} SET ?`, modelData);
             return result;
+        } catch (err) {
+            throw new Error(err)
+        }
+
+        const stackId = uuidv1();
+        try {
+            await dockerStack.deployWrap(dockerYAML, stackId);
         }
         catch (err) {
-            console.error(err);
-            throw new Error(err)
+            throw Error(err);
         }
     }
 }
