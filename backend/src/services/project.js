@@ -21,13 +21,12 @@ module.exports = {
             stackId
         }
         try {
-            const [ result ] =  await connection.query(`INSERT INTO ${MODEL_NAME} SET ?`, modelData);
-            return result;
+            await connection.query(`INSERT INTO ${MODEL_NAME} SET ?`, modelData);
         } catch (err) {
             throw new Error(err)
         }
         try {
-            await dockerStack.deployWrap(dockerYAML, stackId);
+            return await dockerStack.deployWrap(dockerYAML, stackId);
         }
         catch (err) {
             connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);
