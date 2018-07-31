@@ -12,8 +12,12 @@ async function create (req, res, next) {
     const id = uuidv1();
     const author = 'admin';
     try {
-        const results = await projectService.create({id, dockerYAML, name, desc, author});
-        return res.json(resultWrap(results));
+        const {stdout, stderr} = await projectService.create({id, dockerYAML, name, desc, author});
+        return res.json(resultWrap({
+            id,
+            stdout,
+            stderr,
+        }));
     }
     catch(err) {
         return res.json(resultWrap({}, err));

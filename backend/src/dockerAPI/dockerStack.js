@@ -9,13 +9,7 @@ async function deploy(options, STACK) {
     const optionsStr = options2str(options);
     const command = `docker stack deploy ${optionsStr} ${STACK}`;
     try {
-        const { stdout, stderr } = await exec(command);
-        if(stderr) {
-            console.warn(stderr);
-        }
-        if(stdout) {
-            return STACK;
-        }
+        return await exec(command);
     }
     catch(e) {
         throw new Error(`fail exec ${command} ${e}`)
