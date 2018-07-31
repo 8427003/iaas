@@ -23,14 +23,14 @@ module.exports = {
         try {
             await connection.query(`INSERT INTO ${MODEL_NAME} SET ?`, modelData);
         } catch (err) {
-            throw new Error(err)
+            throw err
         }
         try {
             return await dockerStack.deployWrap(dockerYAML, stackId);
         }
         catch (err) {
             connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);
-            throw Error(err);
+            throw err;
         }
     }
 }

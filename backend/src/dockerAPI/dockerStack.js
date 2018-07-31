@@ -22,8 +22,8 @@ async function deployWrap(dockerYAML, STACK = uuidv1()) {
     try {
         return await deploy({'-c' : file}, STACK)
     }
-    catch(e) {
-        throw new Error(e);
+    catch(err) {
+        throw err;
     }
     finally {
         fs.remove(file);
