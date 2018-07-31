@@ -24,8 +24,13 @@ async function deployWrap(dockerYAML, STACK = uuidv1()) {
         fs.remove(file);
     }
 }
+async function rm(STACK) {
+    const command = `docker stack rm ${STACK}`;
+    return await exec(command);
+}
 
 module.exports = {
     deploy,
     deployWrap,
+    rm,
 }

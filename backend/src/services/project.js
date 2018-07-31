@@ -3,6 +3,7 @@ const projectTemplateService = require('../services/projectTemplate');
 const projectService = require('../services/project');
 const dockerStack = require('../dockerAPI/dockerStack');
 const uuidv1 = require('uuid/v1');
+const _get = require('lodash/get');
 const MODEL_NAME = 'project';
 
 module.exports = {
@@ -32,5 +33,20 @@ module.exports = {
             connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);
             throw err;
         }
+    },
+    del: async ({id}) => {
+        const connection = db.getConnection();
+        const  [ results ] = await connection.query(`SELECT stackId FROM ${MODEL_NAME} WHERE id = ?`, [id]);
+        const stackId = _get(results, '0.stackId');
+        if(!stackId) {
+            throw Error(`not found ${MODEL_NAME} = ${id}`);
+        }
+        await dockerStack.rm(stackId);
+        return await connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);
+    },
+    list: async (pageNum, pageSize) => {
+        const connection = db.getConnection();
+        const [results] = await connection.query(`SELECT * FROM ${MODEL_NAME}`);
+        return results;
     }
 }

@@ -8,5 +8,3 @@ connection.init();
 require('./controllers/projectTempate')(app);
 require('./controllers/project')(app);
 app.listen(3000)
-
-
