@@ -4,6 +4,7 @@ const app = express();
 const connection = require('./helper/dbconnect.js');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
@@ -13,6 +14,8 @@ app.all('*', function(req, res, next) {
     else  next();
 });
 connection.init();
+
 require('./controllers/projectTempate')(app);
 require('./controllers/project')(app);
+
 app.listen(3000)

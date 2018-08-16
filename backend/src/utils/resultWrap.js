@@ -1,10 +1,14 @@
 module.exports = function (result, error) {
     if(error) {
+        if(typeof error === 'object') {
+            error = error.toString();
+        }
+        console.error(error);
         return {
             error: {
                 returnCode: -1,
-                returnUserMessage: JSON.stringify(error),
-                returnMessage: JSON.stringify(error),
+                returnUserMessage: error,
+                returnMessage: error,
             }
         }
     }
