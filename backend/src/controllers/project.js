@@ -1,7 +1,8 @@
 const projectTempateService = require('../services/projectTemplate');
 const projectService = require('../services/project');
-const resultWrap = require('../utils/resultWrap');
+const resultWrap = require('../common/utils/resultWrap');
 const uuidv1 = require('uuid/v1');
+const yaml = require('js-yaml');
 
 module.exports = function(router) {
     router.post('/api/iaas/project/create', create);
@@ -10,11 +11,13 @@ module.exports = function(router) {
 }
 
 async function create (req, res, next) {
-    const { dockerYAML, name, desc } = req.body;
+    const { yamlRaw, name, desc } = req.body;
     const id = uuidv1();
     const author = 'admin';
+    const yamlData = yaml.safeLoad(yamlRaw);
+
     try {
-        const {stdout, stderr} = await projectService.create({id, dockerYAML, name, desc, author});
+        const {stdout, stderr} = await projectService.create({id, yamlData, name, desc, author});
         return res.json(resultWrap({
             id,
             stdout,

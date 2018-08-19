@@ -1,4 +1,4 @@
-const db = require('../helper/dbconnect');
+const db = require('../common/helper/dbconnect');
 const MODEL_NAME = 'project_template';
 
 module.exports = {
@@ -51,5 +51,23 @@ module.exports = {
             map[item.name] = JSON.parse(item.extra);
             return map;
         }, servicesMap);
+    },
+    inspect: async id => {
+        const connection = db.getConnection();
+
+        const sqlList = `select * from project_template pt
+                LEFT JOIN service_template st ON pt.id = st.project_template
+                WHERE pt.id = ?`
+
+        const [ list ] =  await connection.query({ sql: sqlList, nestTables: true }, [id]);
+        const result = {};
+        list.forEach(item => {
+            const ptId = item.pt.id;
+            !result[ptId] && (result[ptId] = item.pt || {});
+            !result[ptId].services && (result[ptId].services = []);
+            item.st && result[ptId].services.push(item.st);
+        })
+
+        return result[id]
     }
 }

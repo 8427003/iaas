@@ -1,4 +1,4 @@
-const db = require('../helper/dbconnect');
+const db = require('../common/helper/dbconnect');
 const projectTemplateService = require('../services/projectTemplate');
 const projectService = require('../services/project');
 const dockerStack = require('../dockerAPI/dockerStack');
@@ -8,7 +8,7 @@ const _get = require('lodash/get');
 const MODEL_NAME = 'project';
 
 module.exports = {
-    create: async ({id, dockerYAML, name, desc, author}) => {
+    create: async ({id, yamlData, name, desc, author}) => {
         const connection = db.getConnection();
         const now = new Date().getTime();
         const stackId = uuidv1();
@@ -19,7 +19,7 @@ module.exports = {
             createTime: now,
             updateTime: now,
             author,
-            dockerYAML: JSON.stringify(dockerYAML),
+            yamlData: JSON.stringify(yamlData),
             stackId
         }
         try {
@@ -28,7 +28,7 @@ module.exports = {
             throw err
         }
         try {
-            return await dockerStack.deployWrap(dockerYAML, stackId);
+            return await dockerStack.deployWrap(yamlData, stackId);
         }
         catch (err) {
             connection.query(`DELETE FROM ${MODEL_NAME} WHERE id = ?`, [id]);

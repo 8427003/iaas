@@ -1,4 +1,4 @@
-const db = require('../helper/dbconnect');
+const db = require('../common/helper/dbconnect');
 const MODEL_NAME = 'service_template';
 const yaml = require('js-yaml');
 const _get = require('lodash/get');

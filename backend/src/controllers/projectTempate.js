@@ -1,6 +1,6 @@
 const projectTempateService = require('../services/projectTemplate');
 const serviceTempateService = require('../services/serviceTemplate');
-const resultWrap = require('../utils/resultWrap');
+const resultWrap = require('../common/utils/resultWrap');
 const yaml = require('js-yaml');
 const uuidv1 = require('uuid/v1');
 
@@ -8,6 +8,7 @@ module.exports = function(router) {
     router.post('/api/iaas/projectTemplate/add', add);
     router.get('/api/iaas/projectTemplate/list', list);
     router.post('/api/iaas/projectTemplate/delete', del);
+    router.get('/api/iaas/projectTemplate/inspect', inspect);
 }
 
 async function add (req, res, next) {
@@ -48,10 +49,18 @@ async function del(req, res, next) {
     }
 }
 
+async function inspect(req, res, next){
+    const id = req.query.id;
+    try {
+        const pt = await projectTempateService.inspect(id);
+        res.json(resultWrap(pt));
+    }
+    catch (err) {
+        res.json(resultWrap({}, err));
+    }
+}
+
 function update(req, res, next) {
 
 }
 
-function inspect(req, res, next){
-
-}
