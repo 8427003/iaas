@@ -7,6 +7,5 @@ const loadRoutes = require('./routes');
 loadMiddleware(app);
 loadRoutes(app);
 
-app.listen(SERVER_PORT || 3000, function (e){
-    console.log(e);
-})
+console.log('port:', SERVER_PORT || 3000)
+app.listen(SERVER_PORT || 3000)

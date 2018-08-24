@@ -5,7 +5,7 @@ const DB_CONFIG = {
     password : 'root',
     database : 'docker'
 }
-const SERVER_PORT = '8080';
+const SERVER_PORT = '3000';
 
 module.exports = {
     LOGS_PATH,
