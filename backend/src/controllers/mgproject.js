@@ -1,17 +1,18 @@
 const projectTempateService = require('../services/projectTemplate');
 const projectService = require('../services/mbproject');
 const resultWrap = require('../common/utils/resultWrap');
+const { checkLogin } = require('../services/sso');
 const yaml = require('js-yaml');
 
 module.exports = function(router) {
-    router.post('/api/iaas/project/create', create);
-    router.get('/api/iaas/project/list', list);
-    router.post('/api/iaas/project/del', del);
-    router.get('/api/iaas/project/inspect', inspect);
-    router.post('/api/iaas/project/stop', stop);
-    router.post('/api/iaas/project/restart', restart);
-    router.post('/api/iaas/project/save', save);
-    router.post('/api/iaas/project/createTemplate', createTemplate);
+    router.post('/api/iaas/project/create', checkLogin, create);
+    router.get('/api/iaas/project/list', checkLogin, list);
+    router.post('/api/iaas/project/del', checkLogin, del);
+    router.get('/api/iaas/project/inspect', checkLogin, inspect);
+    router.post('/api/iaas/project/stop', checkLogin, stop);
+    router.post('/api/iaas/project/restart', checkLogin, restart);
+    router.post('/api/iaas/project/save', checkLogin, save);
+    router.post('/api/iaas/project/createTemplate', checkLogin, createTemplate);
 }
 
 async function create (req, res, next) {
